@@ -35,7 +35,12 @@ def update_sensor(sensor_id: int, sensor: ApiSensor):
     db.refresh(existing_sensor)
     return existing_sensor
 
-@router.delete("/sensors/{sensor_id}")
+@router.delete("/sensors/{sensor_id}", description='Deletes a sensor in the database with the specified ID. Raises HttpException if there is no sensor with the specified ID, a successfull message otherwise.')
 def delete_sensor(sensor_id: int):
-    # TODO
-    return None
+    db = SessionLocal()
+    sensor = db.query(DbSensor).filter(DbSensor.id == sensor_id).first()
+    if not sensor:
+        raise HTTPException(status_code=404, detail="Sensor not found")
+    db.delete(sensor)
+    db.commit()
+    return {"message": "Sensor deleted successfully"}
