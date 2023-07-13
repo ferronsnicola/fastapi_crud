@@ -15,9 +15,12 @@ def create_sensor(sensor: ApiSensor):
     return new_sensor
 
 @router.get("/sensors/{sensor_id}")
-def get_sensor(sensor_id: int, response_model=ApiSensor):
-    # TODO
-    return None
+def get_sensor(sensor_id: int, response_model=ApiSensor, description='Retrieve sensor by ID, raises HttpException if there is no sensor with specified ID'):
+    db = SessionLocal()
+    sensor = db.query(DbSensor).filter(DbSensor.id == sensor_id).first()
+    if not sensor:
+        raise HTTPException(status_code=404, detail="Sensor not found")
+    return sensor
 
 @router.put("/sensors/{sensor_id}")
 def update_sensor(sensor_id: int, sensor: ApiSensor):
