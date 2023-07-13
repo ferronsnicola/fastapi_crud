@@ -5,7 +5,7 @@ from app.db.models import Sensor as DbSensor
 router = APIRouter()
 SessionLocal = None
 
-@router.post("/sensors/", status_code=201)
+@router.post("/sensors/", status_code=201, response_model=ApiSensor, description='Creates a new sensor data in the database, and returns it as a succesfull response')
 def create_sensor(sensor: ApiSensor):
     db = SessionLocal()
     new_sensor = DbSensor(name=sensor.name, ip_address=sensor.ip_address, last_value=sensor.last_value)
