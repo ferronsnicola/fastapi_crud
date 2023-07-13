@@ -3,7 +3,7 @@ from app.api.models import SensorCreate, SensorUpdate
 from app.db.models import Sensor
 
 router = APIRouter()
-
+SessionLocal = None
 
 @router.post("/sensors/", status_code=201)
 def create_sensor(sensor: SensorCreate):
